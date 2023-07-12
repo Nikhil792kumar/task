@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <title></title>
+</head>
+<body>
+    <script>
+   function findCityByFirstName(jsonArray, firstName) {
+  const person = jsonArray.find(function (person) {
+    return person.fname === firstName;
+  });
+
+  if (person) {
+    return person.city;
+  }
+
+  return null;
+}
+const people = [
+  {"fname": "Jack", "lname": "Smith", "city": "London"},
+  {"fname": "Mary", "lname": "Markle", "city": "London"},
+  {"fname": "Ed", "lname": "May", "city": "Paris"},
+  {"fname": "Tim", "lname": "Gates", "city": "Rome"}
+];
+
+const firstName = "Mary";
+const city = findCityByFirstName(people, firstName);
+console.log(city);
+  </script>
+</body>
+</html
