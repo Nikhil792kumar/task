@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Quiz Show</title>
+    <style>
+      .student-box {
+        display: inline-block;
+        width: 150px;
+        height: 50px;
+        margin: 10px;
+        text-align: center;
+        line-height: 50px;
+        color: white;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome To The Quiz Show</h1>
+    <div id="studentContainer"></div>
+  <script>
+
+var students = [
+  { name: "Alice", score: 0 },
+  { name: "Bob", score: 0 },
+  { name: "Charlie", score: 0 }
+];
+function updateScore(index, points) {
+  students[index].score += points;
+  displayStudents();
+}
+function displayStudents() {
+  var container = document.getElementById("studentContainer");
+  container.innerHTML = "";
+
+  var html = "";
+  for (var i = 0; i < students.length; i++) {
+    var student = students[i];
+    var backgroundColor = "red";
+
+    if (student.score === 0) {
+      backgroundColor = "red";
+    } else if (student.score > 0) {
+      backgroundColor = "blue";
+    } else {
+      backgroundColor = "green";
+    }
+
+    var addButton = '<button onclick="updateScore(' + i + ', 2)">+2</button>';
+    var subtractButton = '<button onclick="updateScore(' + i + ', -1)">-1</button>';
+
+    var studentBoxHTML =
+      '<div class="student-box" style="background-color: ' +
+      backgroundColor +
+      ';">' +
+      student.name +
+      " - " +
+      student.score +
+      "<br>" +
+      addButton +
+      "&nbsp;" +
+      subtractButton +
+      "</div>";
+
+    html += studentBoxHTML;
+  }
+
+  container.innerHTML = html;
+}
+displayStudents();
+
+  </script>
+  </body>
+</html>
+
+
