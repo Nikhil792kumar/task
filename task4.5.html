@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Person</title>
+</head>
+<body>
+  <div>
+    <label for="nameInput">Name:</label>
+    <input type="text" id="nameInput" oninput="checkDuplicateName()" placeholder="Enter name">
+    <div id="nameError" style="color: red;"></div>
+  </div>
+  <div>
+    <label for="ageInput">Age:</label>
+    <input type="number" id="ageInput" placeholder="Enter age" oninput="validateAgeInput()">
+    <div id="ageError" style="color: red;"></div>
+  </div>
+  <div>
+    <label for="cityInput">City:</label>
+    <input type="text" id="cityInput" placeholder="Enter city" oninput="validateCityInput()">
+    <div id="cityError" style="color: red;"></div>
+  </div>
+  <div>
+    <label for="techInput">Technology:</label>
+    <input type="text" id="techInput" placeholder="Enter technology" oninput="validateTechInput()">
+    <div id="techError" style="color: red;"></div>
+  </div>
+  <div>
+    <button id="addPersonButton" onclick="addPerson()" disabled>Add Person</button>
+  </div>
+
+  <script>
+    var people = [
+      {"name":"Jack","age":28,"city":"London","tech":"Android"},
+      {"name":"Mary","age":32,"city":"Paris","tech":"React"},
+      {"name":"Bob","age":35,"city":"New York","tech":"Angular"},
+      {"name":"Steve","age":26,"city":"Delhi","tech":"Spring"}
+    ];
+
+    var cities = people.map(function(person) {
+      return person.city;
+    });
+
+    var technologies = people.map(function(person) {
+      return person.tech;
+    });
+
+    var fieldStatus = [false, false, false, false]; // Tracks the validation status of each field
+
+    function checkDuplicateName() {
+      var nameInput = document.getElementById("nameInput");
+      var name = nameInput.value;
+      var nameError = document.getElementById("nameError");
+
+      for (var i = 0; i < people.length; i++) {
+        if (people[i].name === name) {
+          nameError.textContent = "Name already exists. Please enter a different name.";
+          fieldStatus[0] = false; // Update the validation status for name field
+          updateAddPersonButtonStatus();
+          return;
+        }
+      }
+
+      nameError.textContent = "";
+      fieldStatus[0] = true; // Update the validation status for name field
+      updateAddPersonButtonStatus();
+    }
+
+    function validateAgeInput() {
+      var ageInput = document.getElementById("ageInput");
+      var age = parseInt(ageInput.value);
+      var ageError = document.getElementById("ageError");
+
+      if (age < 18) {
+        ageError.textContent = "Age must be 18 or above.";
+        fieldStatus[1] = false; // Update the validation status for age field
+        updateAddPersonButtonStatus();
+      } else {
+        ageError.textContent = "";
+        fieldStatus[1] = true; // Update the validation status for age field
+        updateAddPersonButtonStatus();
+      }
+    }
+
+    function validateCity(city) {
+      for (var i = 0; i < cities.length; i++) {
+        if (cities[i] === city) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function validateCityInput() {
+      var cityInput = document.getElementById("cityInput");
+      var city = cityInput.value;
+      var cityError = document.getElementById("cityError");
+
+      if (!validateCity(city)) {
+        var validCities = cities.join(", ");
+        cityError.textContent = "Invalid city. Please enter one of the following cities: " + validCities;
+        fieldStatus[2] = false; // Update the validation status for city field
+        updateAddPersonButtonStatus();
+      } else {
+        cityError.textContent = "";
+        fieldStatus[2] = true; // Update the validation status for city field
+        updateAddPersonButtonStatus();
+      }
+    }
+
+    function validateTechnology(technology) {
+      for (var i = 0; i < technologies.length; i++) {
+        if (technologies[i] === technology) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function validateTechInput() {
+      var techInput = document.getElementById("techInput");
+      var technology = techInput.value;
+      var techError = document.getElementById("techError");
+
+      if (!validateTechnology(technology)) {
+        var validTechnologies = technologies.join(", ");
+        techError.textContent = "Invalid technology. Please enter one of the following technologies: " + validTechnologies;
+        fieldStatus[3] = false; // Update the validation status for technology field
+        updateAddPersonButtonStatus();
+      } else {
+        techError.textContent = "";
+        fieldStatus[3] = true; // Update the validation status for technology field
+        updateAddPersonButtonStatus();
+      }
+    }
+
+    function updateAddPersonButtonStatus() {
+      var addPersonButton = document.getElementById("addPersonButton");
+
+      // Enable the button if all fields are validated, otherwise disable it
+      if (fieldStatus.every(function(status) { return status === true; })) {
+        addPersonButton.disabled = false;
+      } else {
+        addPersonButton.disabled = true;
+      }
+    }
+
+    function addPerson() {
+      var nameInput = document.getElementById("nameInput");
+      var ageInput = document.getElementById("ageInput");
+      var cityInput = document.getElementById("cityInput");
+      var techInput = document.getElementById("techInput");
+
+      var name = nameInput.value;
+      var age = parseInt(ageInput.value);
+      var city = cityInput.value;
+      var tech = techInput.value;
+
+      var nameError = document.getElementById("nameError");
+      var ageError = document.getElementById("ageError");
+      var cityError = document.getElementById("cityError");
+      var techError = document.getElementById("techError");
+
+      if (!validateCity(city)) {
+        var validCities = cities.join(", ");
+        cityError.textContent = "Invalid city. Please enter one of the following cities: " + validCities;
+        return;
+      }
+
+      if (!validateTechnology(tech)) {
+        var validTechnologies = technologies.join(", ");
+        techError.textContent = "Invalid technology. Please enter one of the following technologies: " + validTechnologies;
+        return;
+      }
+
+      if (age < 18) {
+        ageError.textContent = "Age must be 18 or above.";
+        return;
+      }
+
+      nameError.textContent = "";
+      ageError.textContent = "";
+      cityError.textContent = "";
+      techError.textContent = "";
+
+      var newPerson = {"name": name, "age": age, "city": city, "tech": tech};
+      people.push(newPerson);
+
+      // Optional: Reset the input fields after adding a person
+      nameInput.value = "";
+      ageInput.value = "";
+      cityInput.value = "";
+      techInput.value = "";
+
+      console.log("Person added:", newPerson);
+    }
+  </script>
+</body>
+</html>
+
